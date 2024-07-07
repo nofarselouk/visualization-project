@@ -143,11 +143,12 @@ def app3():
 
 # Main Streamlit app
 st.sidebar.title("Navigation")
-app_selection = st.sidebar.radio("Go to", ["Application 1", "Application 2", "Application 3"])
+st.sidebar.markdown("<style>.css-1d391kg {color: red;}</style>", unsafe_allow_html=True)
+app_selection = st.sidebar.radio("Go to", ["Heatmap", "Bar Chart", "Pair Plot"])
 
-if app_selection == "Application 1":
+if app_selection == "Heatmap":
     app1()
-elif app_selection == "Application 2":
+elif app_selection == "Bar Chart":
     app2()
-elif app_selection == "Application 3":
+elif app_selection == "Pair Plot":
     app3()
