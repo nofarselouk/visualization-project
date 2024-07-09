@@ -72,11 +72,11 @@ def app2():
     # Ensure selected column is sorted by count
     if selected_column == 'age_group':
         data[selected_column] = data[selected_column].astype(str)
-        category_order = data[selected_column].value_counts().index.tolist()
+        category_order = ['0-18', '19-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100']
     elif selected_column == 'month':
         data[selected_column] = pd.Categorical(data[selected_column], categories=[
             'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], ordered=True)
-        category_order = data[selected_column].value_counts().index.tolist()
+        category_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     else:
         category_order = data[selected_column].value_counts().index.tolist()
 
@@ -88,7 +88,7 @@ def app2():
         x='race/ethnicity',
         color=selected_column,
         barmode='group',
-        category_orders={'race/ethnicity': data['race/ethnicity'].value_counts().index,
+        category_orders={'race/ethnicity': data['race/ethnicity'].value_counts().index.tolist(),
                          selected_column: category_order},
         color_discrete_sequence=px.colors.qualitative.Set1
     )
@@ -99,7 +99,6 @@ def app2():
         legend_title=selected_column.replace("_", " ").capitalize()
     )
     st.plotly_chart(fig)
-
 
 # Define app3
 def app3():
