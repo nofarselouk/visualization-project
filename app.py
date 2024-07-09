@@ -69,13 +69,17 @@ def app2():
                                    format_func=lambda x: next(
                                        item['label'] for item in column_options if item['value'] == x))
 
+    # Ensure selected column is sorted by count
     if selected_column == 'age_group':
         data[selected_column] = data[selected_column].astype(str)
-        category_order = data['age_group'].value_counts().index.tolist()
     elif selected_column == 'month':
-        category_order = data['month'].value_counts().index.tolist()
+        data[selected_column] = pd.Categorical(data[selected_column], categories=[
+            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
+            'November', 'December'], ordered=True)
     else:
-        category_order = data[selected_column].unique()
+        data[selected_column] = data[selected_column].astype('category')
+
+    category_order = data[selected_column].value_counts().index.tolist()
 
     fig = px.histogram(
         data,
