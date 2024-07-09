@@ -43,7 +43,6 @@ def app1():
 
 
 # Define app2
-# Define app2
 def app2():
     file_path = "police_killings.csv"
     data = pd.read_csv(file_path, encoding='ISO-8859-1')
@@ -82,11 +81,10 @@ def app2():
     else:
         category_order = data[selected_column].value_counts().index.tolist()
 
-    # Create a temporary DataFrame to get counts for sorting
+    # Aggregate and sort data by race/ethnicity and selected column
     temp_df = data.groupby(['race/ethnicity', selected_column]).size().reset_index(name='counts')
     temp_df = temp_df.sort_values(by=['race/ethnicity', 'counts'], ascending=[True, False])
 
-    # Use sorted temp_df for plotting
     fig = px.histogram(
         temp_df,
         x='race/ethnicity',
