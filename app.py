@@ -82,13 +82,13 @@ def app2():
         category_order = data[selected_column].value_counts().index.tolist()
 
     # Aggregate and sort data by race/ethnicity and selected column
-    temp_df = data.groupby(['race/ethnicity', selected_column]).size().reset_index(name='counts')
-    temp_df = temp_df.sort_values(by=['race/ethnicity', 'counts'], ascending=[True, False])
+    temp_df = data.groupby(['race/ethnicity', selected_column]).size().reset_index(name='count')
+    temp_df = temp_df.sort_values(by=['race/ethnicity', 'count'], ascending=[True, False])
 
     fig = px.histogram(
         temp_df,
         x='race/ethnicity',
-        y='counts',
+        y='count',
         color=selected_column,
         barmode='group',
         category_orders={'race/ethnicity': data['race/ethnicity'].value_counts().index.tolist(),
