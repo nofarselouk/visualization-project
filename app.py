@@ -69,26 +69,23 @@ def app2():
                                    format_func=lambda x: next(
                                        item['label'] for item in column_options if item['value'] == x))
 
+    # Ensure selected column is sorted by count
     if selected_column == 'age_group':
         data[selected_column] = data[selected_column].astype(str)
         category_order = ['0-18', '19-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100']
     elif selected_column == 'month':
         data[selected_column] = pd.Categorical(data[selected_column], categories=[
-            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
-            'November', 'December'], ordered=True)
-        category_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
-                          'October', 'November', 'December']
+            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], ordered=True)
+        category_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     else:
         category_order = data[selected_column].value_counts().index.tolist()
 
-    # Aggregate and sort data by race/ethnicity and selected column
-    temp_df = data.groupby(['race/ethnicity', selected_column]).size().reset_index(name='count')
-    temp_df = temp_df.sort_values(by=['race/ethnicity', 'count'], ascending=[True, False])
+    # Sort data by race/ethnicity and selected column
+    data = data.sort_values(by=['race/ethnicity', selected_column], ascending=[True, True])
 
     fig = px.histogram(
-        temp_df,
+        data,
         x='race/ethnicity',
-        y='count',
         color=selected_column,
         barmode='group',
         category_orders={'race/ethnicity': data['race/ethnicity'].value_counts().index.tolist(),
