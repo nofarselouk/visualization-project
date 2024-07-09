@@ -72,14 +72,16 @@ def app2():
     # Ensure selected column is sorted by count
     if selected_column == 'age_group':
         data[selected_column] = data[selected_column].astype(str)
+        category_order = data[selected_column].value_counts().index.tolist()
     elif selected_column == 'month':
         data[selected_column] = pd.Categorical(data[selected_column], categories=[
-            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
-            'November', 'December'], ordered=True)
+            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], ordered=True)
+        category_order = data[selected_column].value_counts().index.tolist()
     else:
-        data[selected_column] = data[selected_column].astype('category')
+        category_order = data[selected_column].value_counts().index.tolist()
 
-    category_order = data[selected_column].value_counts().index.tolist()
+    # Sort data by race/ethnicity and selected column
+    data = data.sort_values(by=['race/ethnicity', selected_column], ascending=[True, True])
 
     fig = px.histogram(
         data,
