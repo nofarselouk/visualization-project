@@ -43,6 +43,7 @@ def app1():
 
 
 # Define app2
+# Define app2
 def app2():
     file_path = "police_killings.csv"
     data = pd.read_csv(file_path, encoding='ISO-8859-1')
@@ -69,23 +70,27 @@ def app2():
                                    format_func=lambda x: next(
                                        item['label'] for item in column_options if item['value'] == x))
 
-    # Ensure selected column is sorted by count
     if selected_column == 'age_group':
         data[selected_column] = data[selected_column].astype(str)
         category_order = ['0-18', '19-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100']
     elif selected_column == 'month':
         data[selected_column] = pd.Categorical(data[selected_column], categories=[
-            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], ordered=True)
-        category_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+            'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
+            'November', 'December'], ordered=True)
+        category_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
+                          'October', 'November', 'December']
     else:
         category_order = data[selected_column].value_counts().index.tolist()
 
-    # Sort data by race/ethnicity and selected column
-    data = data.sort_values(by=['race/ethnicity', selected_column], ascending=[True, True])
+    # Create a temporary DataFrame to get counts for sorting
+    temp_df = data.groupby(['race/ethnicity', selected_column]).size().reset_index(name='counts')
+    temp_df = temp_df.sort_values(by=['race/ethnicity', 'counts'], ascending=[True, False])
 
+    # Use sorted temp_df for plotting
     fig = px.histogram(
-        data,
+        temp_df,
         x='race/ethnicity',
+        y='counts',
         color=selected_column,
         barmode='group',
         category_orders={'race/ethnicity': data['race/ethnicity'].value_counts().index.tolist(),
@@ -99,6 +104,7 @@ def app2():
         legend_title=selected_column.replace("_", " ").capitalize()
     )
     st.plotly_chart(fig)
+
 
 # Define app3
 def app3():
